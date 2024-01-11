@@ -1,6 +1,7 @@
 using System;
 using GameLogic.Data;
 using GameLogic.Interfaces;
+using UnityEngine;
 
 namespace GameLogic
 {
@@ -60,11 +61,19 @@ namespace GameLogic
 
         public void LoadProgress()
         {
-            var gameProgress = _saveLoadSystem.LoadProgress();
-            _board = gameProgress.Board;
-            _currentSign = gameProgress.CurrentSign;
-            _moveCounter = gameProgress.CountOfMove;
-            ProgressLoaded?.Invoke(_board.GetCellSigns(), _currentSign);
+            try
+            {
+                var gameProgress = _saveLoadSystem.LoadProgress();
+                _board = gameProgress.Board;
+                _currentSign = gameProgress.CurrentSign;
+                _moveCounter = gameProgress.CountOfMove;
+                ProgressLoaded?.Invoke(_board.GetCellSigns(), _currentSign);
+            }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e);
+                Debug.LogError("First Save Data!");
+            }
         }
     }
 }
